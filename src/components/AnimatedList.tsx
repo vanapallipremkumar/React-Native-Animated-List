@@ -1,27 +1,26 @@
-import {useCallback} from 'react';
-import {ListRenderItemInfo, StyleSheet} from 'react-native';
+import { useCallback } from "react";
+import { ListRenderItemInfo, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
-} from 'react-native-reanimated';
-import {ROW_GAP} from '../constants';
-import AnimatedListItem from './AnimatedListItem';
+} from "react-native-reanimated";
+import { ROW_GAP } from "../constants";
+import AnimatedListItem from "./AnimatedListItem";
 
 const windowSize = 15;
-type AnimatedListProps = Readonly<{data: string[]; onEndReached(): void}>;
+type AnimatedListProps = Readonly<{ data: string[]; onEndReached(): void }>;
 
-function AnimatedList({data, onEndReached}: AnimatedListProps) {
-  const x = useSharedValue(0);
-
-  const scrollHandler = useAnimatedScrollHandler(event => {
-    x.value = event.contentOffset.y;
+function AnimatedList({ data, onEndReached }: AnimatedListProps) {
+  const y = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    y.value = event.contentOffset.y;
   });
 
   const renderItem = useCallback(
-    ({index, item}: ListRenderItemInfo<string>) => {
-      return <AnimatedListItem index={index} value={item} x={x} />;
+    ({ index, item }: ListRenderItemInfo<string>) => {
+      return <AnimatedListItem index={index} value={item} y={y} />;
     },
-    [],
+    []
   );
 
   return (
@@ -29,7 +28,7 @@ function AnimatedList({data, onEndReached}: AnimatedListProps) {
       contentContainerStyle={styles.flatlistContent}
       data={data}
       initialNumToRender={windowSize}
-      keyExtractor={item => item}
+      keyExtractor={(item) => item}
       maxToRenderPerBatch={windowSize}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
@@ -43,8 +42,8 @@ function AnimatedList({data, onEndReached}: AnimatedListProps) {
 }
 
 const styles = StyleSheet.create({
-  flatlist: {flex: 1},
-  flatlistContent: {flexGrow: 1, padding: ROW_GAP, rowGap: ROW_GAP},
+  flatlist: { flex: 1 },
+  flatlistContent: { flexGrow: 1, padding: ROW_GAP, rowGap: ROW_GAP },
 });
 
 export default AnimatedList;

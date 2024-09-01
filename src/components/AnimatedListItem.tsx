@@ -1,31 +1,31 @@
-import {StyleSheet, Text} from 'react-native';
+import { StyleSheet, Text } from "react-native";
 import Animated, {
   SharedValue,
   interpolate,
   useAnimatedStyle,
-} from 'react-native-reanimated';
-import {ROW_GAP, ITEM_HEIGHT, ITEM_POSITION} from '../constants';
+} from "react-native-reanimated";
+import { ROW_GAP, ITEM_HEIGHT, ITEM_HEIGHT_WITH_GAP } from "../constants";
 
 type AnimatedListItemProps = {
   index: number;
   value: string;
-  x: SharedValue<number>;
+  y: SharedValue<number>;
 };
 
-const scale = [1, 1, 0.8];
-const translateY = [0, 0, ITEM_POSITION / 2];
+const scale = [1, 1, 0.85];
+const translateY = [0, 0, ITEM_HEIGHT_WITH_GAP];
 
-function AnimatedListItem({index, value, x}: AnimatedListItemProps) {
-  const startPosition = index * ITEM_POSITION + ROW_GAP;
-  const endPosition = startPosition + ITEM_POSITION;
+function AnimatedListItem({ index, value, y }: AnimatedListItemProps) {
+  const startPosition = index * ITEM_HEIGHT_WITH_GAP + ROW_GAP;
+  const endPosition = startPosition + ITEM_HEIGHT_WITH_GAP;
 
   const animatedStyle = useAnimatedStyle(() => {
     const inputRange = [startPosition - 1, startPosition, endPosition];
     return {
-      opacity: interpolate(x.value, [startPosition, endPosition], [1, 0]),
+      opacity: interpolate(y.value, [startPosition, endPosition], [1, 0]),
       transform: [
-        {translateY: interpolate(x.value, inputRange, translateY)},
-        {scale: interpolate(x.value, inputRange, scale)},
+        { translateY: interpolate(y.value, inputRange, translateY) },
+        { scale: interpolate(y.value, inputRange, scale) },
       ],
     };
   });
@@ -39,16 +39,16 @@ function AnimatedListItem({index, value, x}: AnimatedListItemProps) {
 
 const styles = StyleSheet.create({
   value: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
   },
   wrapper: {
-    backgroundColor: 'teal',
+    backgroundColor: "teal",
     borderRadius: 16,
     height: ITEM_HEIGHT,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 16,
-    width: '100%',
+    width: "100%",
   },
 });
 
